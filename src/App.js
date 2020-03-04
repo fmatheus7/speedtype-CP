@@ -1,25 +1,45 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './styles.css'
 
 function App() {
 
+
+
+  const STARTING_TIME = 5;
+
   const [input, setInput] = useState('');
-  const [remaningTime, setRemaningTime] = useState(5);
-  const [startGame, setStartGame] = useState(false)
-
-
+  const [remaningTime, setRemaningTime] = useState(STARTING_TIME);
+  const [startGame, setStartGame] = useState(false);
+  const [wordCount, setWordCount] = useState(0);
+  const [enableButton, setEnableButton] = useState(true);
+  const textBoxRef = useRef(null);
 
   const handleInput = (e) => {
     const {value} = e.target;
     setInput(value);
-    console.log(input)
   }
 
   const calculateWords = (input) => {
     const numberOfWords = input.trim().split(" ") // remove the spaces from the array 
     const filteredWords = numberOfWords.filter(word => word !== "") // prevent the inicial spaces count as word 
-    return filteredWords.length;
+    setWordCount(filteredWords.length); 
   }
+
+  function startClock() {
+    setStartGame(true);
+    setRemaningTime(STARTING_TIME);
+    setInput('');
+    setEnableButton(false);
+    textBoxRef.current.disabled = false;
+    textBoxRef.current.focus();
+  }
+
+  function endGame() {
+    setStartGame(false);
+    calculateWords(input);
+    setEnableButton(true);
+  }
+
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -28,7 +48,7 @@ function App() {
         setRemaningTime((time) => time - 1)
       }
       else if (remaningTime === 0) {
-        setStartGame(false)
+        endGame();
       }
     }, 1000);
     return () => clearTimeout(timer);
@@ -41,10 +61,12 @@ function App() {
       <textarea 
         onChange={handleInput}
         value={input} 
+        ref={textBoxRef}
+        disabled={(enableButton) ? "disabled" : ""}
       />
       <h4>Time remaning {remaningTime}</h4>
-      <button onClick={() => setStartGame(true)}>Start game</button>
-      <h1>word count:</h1>
+      <button disabled={(enableButton) ? "" : "disabled"}onClick={startClock}>Start game</button>
+      <h1>word count:{wordCount}</h1>
 
 
     </div>
