@@ -1,12 +1,12 @@
-# this project is  from react bootcamp by scrimba #
+# This project is  from react bootcamp by scrimba #
 
-#THE GOALS FROM THE PROJECT
+# The goals of the project is to use and understanding of React Hooks
 
-# use of React Hooks
 -useState
 -useRef
 -useEffect
 
-#Description
+# Description
+
 - a web application that receives the number of words typed by the user and calculates them using react hooks.
 
